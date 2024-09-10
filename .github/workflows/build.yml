@@ -26,7 +26,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: cache
+      - name: cache cargo
         uses: actions/cache@v4
         with:
           path: ~/.cargo
@@ -35,7 +35,7 @@ jobs:
             cargo-${{ matrix.platform.arch }}-
             cargo-
 
-      - name: cache
+      - name: cache target
         uses: actions/cache@v4
         with:
           path: target
