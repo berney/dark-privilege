@@ -34,7 +34,8 @@ jobs:
         run: |
           set -x
           ls -la
-          tree -aC target/
+          # tree is not installed
+          #tree -aC target/
           find target -name '*.exe' 2>/dev/null
           find target -name '*.dll' 2>/dev/null
           ls -l target/release/*.exe || true
