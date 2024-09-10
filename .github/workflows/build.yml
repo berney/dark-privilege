@@ -1,0 +1,38 @@
+name: Build
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: bash
+
+    strategy:
+      fail-fast: false
+      matrix:
+        platform:
+          - arch: x86
+            path: Win32
+          - arch: x64
+            path: x64
+          - arch: ARM64
+            path: ARM64
+
+    name: Build ${{matrix.platform.arch}}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build
+        run: |
+          cargo build --release
+
+      - name: Inspect Build
+        run: |
+          find target -name '*.exe' 2>/dev/null
+          find target -name '*.dll' 2>/dev/null
+          ls -l target/release/*.exe || true
+          ls -l target/release/*.dll || true
