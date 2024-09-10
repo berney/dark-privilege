@@ -1,0 +1,24 @@
+= Dark Privilege
+
+Windows Privilege Escalation Scanner.
+
+
+== Getting Started
+
+=== WIP - Intended Future
+Download the binaries from the Releases tab.
+The GitHub Workflow has built and tested these.
+
+== Building
+
+=== WIP - Intended Future
+This tool is based on Rust.
+To ease development it is built in Docker.
+The docker container uses the Linux platform and cross compiles to Windows.
+It targets the MSVC ABI.
+But it is possible to target GNU ABI if you wish.
+
+[source, bash]
+----
+docker build -t berne/dark-privilege .
+----

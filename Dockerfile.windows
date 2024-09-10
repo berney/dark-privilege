@@ -1,0 +1,9 @@
+# syntax=docker/dockerfile:1
+# Use the latest Windows Server Core 2022 image.
+# Can't use nanoserver because it's missing needed DLLs and VS won't install
+FROM mcr.microsoft.com/windows/servercore:ltsc2022
+SHELL ["powershell"]
+COPY docker.ps1 .
+RUN ./docker.ps1
+COPY . .
+RUN ./build.ps1
