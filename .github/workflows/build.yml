@@ -32,7 +32,23 @@ jobs:
 
       - name: Inspect Build
         run: |
+          set -x
+          ls -la
+          tree -aC target/
           find target -name '*.exe' 2>/dev/null
           find target -name '*.dll' 2>/dev/null
           ls -l target/release/*.exe || true
           ls -l target/release/*.dll || true
+
+      - name: Test
+        run: |
+          set -eux
+          cargo run --release -- help
+          cargo run --release -- --help
+          cargo run --release -- version
+          cargo run --release -- --version
+          cargo run --release -- -V
+          cargo run --release -- whoami
+          cargo run --release -- winver
+          cargo run --release -- privileges
+          cargo run --release -- all
