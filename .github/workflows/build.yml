@@ -30,13 +30,19 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.cargo
-          key: cargo-${{ matrix.platform.arch }}
+          key: cargo-${{ matrix.platform.arch }}-${{ github.sha }}
+          restore-keys: |
+            cargo-${{ matrix.platform.arch }}-
+            cargo-
 
       - name: cache
         uses: actions/cache@v4
         with:
           path: target
-          key: target-${{ matrix.platform.arch }}
+          key: target-${{ matrix.platform.arch }}-${{ github.sha }}
+          restore-keys: |
+            target-${{ matrix.platform.arch }}-
+            target-
 
       - name: Build
         run: |
