@@ -1,0 +1,48 @@
+[alias]
+# Use this alias like this: `cargo build-std --release`
+# `.cargo/config.toml` doesn't support these flags in `rustflags` etc.
+build-std = "build -Z build-std=std,panic_abort -Z build-std-features=optimize_for_size"
+
+[build]
+target = "x86_64-pc-windows-msvc"
+
+[target.x86_64-pc-windows-msvc]
+# Enable Control Flow Guard (CFG) at linker
+# This should ensure CFG occurs for any C code that crates bring along
+rustflags = [
+    # Control Flow Guard (CFG)
+    "-Ccontrol-flow-guard",
+    # I'm not sure if this is 100% redundant, I saw something saying that using the `cc` create C/C++ stuff might miss CFG without this.
+    "-C", "link-args=/guard:cf",
+
+    # Return Flow Guard (RFG) - a specialisation of CFG
+    # This was never shipped by Microsoft due to the implementation having a race-condition that allowed bypassing it
+    # https://www.techrepublic.com/article/windows-10-security-how-the-shadow-stack-will-help-to-keep-the-hackers-at-bay/
+    # https://xlab.tencent.com/en/2016/11/02/return-flow-guard/
+    # https://github.com/trailofbits/winchecksec/issues/82
+    # https://github.com/trailofbits/winchecksec/pull/83
+    #"-C", "link-args=/guard:rfg",
+
+    # This needs nightly `rustup install nightly`
+    # I have added `rust-toolchain.toml` to select the `nightly` channel.
+    # lib-std isn't compiled with `ehcont` and I think it's a bad idea to force ehcont.`
+    # Seems you need to clone rust, modify the compilation settings, and build it yourself... lot of fucking around.
+    # winchecksec doesn't have a check for `ehcont`
+    #"-Zehcont_guard",
+    #"link-args=/guard:cf /guard:ehcont",
+
+    # These are setup in `.Cargo.toml` as a cargo alias
+    # Nightly Flags
+    #"-Z", "build-std=std,panic_abort",
+    #"-Z", "build-std-features=optimize_for_size",
+]
+
+# See https://github.com/rust-lang/rust/blob/master/config.example.toml
+# See https://github.com/airbus-seclab/c-compiler-security/blob/master/msvc_compilation.md
+# See https://github.com/microsoft/sudo/blob/00f0d198493ed6ff4b8194daff01234c7d742e3c/.cargo/ms-toolchain-config.toml
+# TODO XXX enable `-Cehcont_guard`
+# /guard:ehcont
+# TODO XXX Do I want `-Ctarget-feature=+crt-static`?
+# /CETCOMPAT
+# /sdl
+# /Qspectre <- there's more variations of this
