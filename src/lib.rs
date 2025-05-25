@@ -59,7 +59,7 @@ use enigo::{
 // I'm worried that functions in `src/dll.rs` will end up in static exe (`src/main.rs`)
 // Conditionally include the `dll.rs` module only when building the DLL (cdylib)
 //#[cfg(any(windows_dll))]
-mod dll;
+//mod dll;
 
 fn get_window_under_cursor() -> Option<HWND> {
     // Create a POINT struct to hold the cursor's position
@@ -131,6 +131,7 @@ pub fn paste(message : &String) {
             debug!("enigo mouse location: {:?}", enigo.location().unwrap());
             // This works with notepad inside HTML5 Citrix in Edge
             enigo.button(Button::Left, Click).unwrap();
+            thread::sleep(Duration::from_secs_f64(0.5));
             // write text
             enigo
                 .text(message)

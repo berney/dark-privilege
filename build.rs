@@ -26,19 +26,21 @@ fn what_c_linkage() {
     let linkage = env::var("CARGO_CFG_TARGET_FEATURE").unwrap_or(String::new());
 
     if linkage.contains("crt-static") {
-        println!("the C runtime will be statically linked");
+        eprintln!("the C runtime will be statically linked");
     } else {
-        println!("the C runtime will be dynamically linked");
+        eprintln!("the C runtime will be dynamically linked");
     }
 }
 
 
 fn main() {
+    println!("cargo:rerun-if-changed=build.rs");
+
     embed_git_info();
     what_c_linkage();
 
     let exe_name = env::var("CARGO_BIN_NAME").unwrap_or_else(|_| "unknown".to_string());
-    println!("XXX exe_name {exe_name}");
+    eprintln!("XXX exe_name {exe_name}");
     // If we're building the import binary, link the DLL
     if exe_name == "dark-privilege-import" {
         // Tell cargo to link against the DLL, using the import table

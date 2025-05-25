@@ -14,7 +14,7 @@ extern "C" {
 */
 
 #[link(name = "dark_privilege_lib.dll")]
-extern "C" {
+unsafe extern "C" {
     fn hello_world();
 }
 
